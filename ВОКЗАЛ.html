@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Вокзальне табло Цаїва</title>
+    <style>
+        /* Підключаємо шрифт як окремий файл */
+        @font-face {
+            font-family: 'Krapka';
+            /* Вкажи точну назву файлу, який ти заллєш поруч */
+            src: url('mono_biletik-regular_1_0_w.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            background: black;
+            color: #14E300; 
+            font-family: 'Krapka', sans-serif; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            text-shadow: 0 0 15px #14E300;
+        }
+
+        #display {
+            font-size: 100px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="display"></div>
+
+    <script>
+        const texts = ["ЦАЇВ — СУПРАЛ", "TSAYIV — SUPRAL"]; 
+        const chars = "АБВГДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789— ";
+        let currentIdx = 0;
+        const el = document.getElementById('display');
+
+        function scrambleText(targetText) {
+            let iteration = 0;
+            const interval = setInterval(() => {
+                el.innerText = targetText.split("")
+                    .map((letter, index) => {
+                        if (index < iteration) return targetText[index];
+                        return chars[Math.floor(Math.random() * chars.length)];
+                    })
+                    .join("");
+                if (iteration >= targetText.length) clearInterval(interval);
+                iteration += 1 / 3; 
+            }, 30); 
+        }
+
+        scrambleText(texts[currentIdx]);
+        setInterval(() => {
+            currentIdx = (currentIdx + 1) % texts.length;
+            scrambleText(texts[currentIdx]);
+        }, 5000);
+    </script>
+</body>
+</html>
