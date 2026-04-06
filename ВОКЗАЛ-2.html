@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Вокзальне табло Цаєва</title>
+    <style>
+        @font-face {
+            font-family: 'Krapka';
+            src: url('mono_biletik-regular_1_0_w.woff') format('woff');
+        }
+
+        body {
+            background: #000;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            text-transform: uppercase;
+        }
+
+        .main-container {
+            display: flex;
+            background: #080808;
+            border: 4px solid #1a1a1a;
+            padding: 30px;
+            gap: 40px; /* Відступ між Колією та іншою інфою */
+            align-items: center; /* Центрування по вертикалі */
+        }
+
+        /* КОЛІЯ (Вертикальний блок зліва) */
+        .track-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-right: 40px;
+            border-right: 2px solid #1a1a1a; /* Розділювальна лінія */
+        }
+
+        .track-box {
+            width: 100px;
+            height: 110px;
+            background: #151515;
+            border: 1px solid #333;
+            color: #fff;
+            font-size: 85px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-shadow: 0 0 20px #fff;
+        }
+
+        /* ПРАВА ЧАСТИНА (Інфо + Сполучення) */
+        .content-section {
+            display: flex;
+            flex-direction: column;
+            gap: 40px; /* Відступ між верхнім рядом і сполученням */
+        }
+
+        .top-row {
+            display: flex;
+            gap: 40px;
+            align-items: flex-end;
+        }
+
+        .column { display: flex; flex-direction: column; align-items: center; }
+        .char-group { display: flex; gap: 4px; }
+
+        /* Заголовки */
+        .h-en { color: #555; font-size: 13px; font-weight: bold; letter-spacing: 1px; }
+        .h-ua { color: #333; font-size: 11px; margin-bottom: 10px; }
+
+        /* Квадратики */
+        .box {
+            width: 36px;
+            height: 54px;
+            background: #111;
+            border: 1px solid #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #14E300;
+            font-family: 'Krapka', sans-serif;
+            font-size: 38px;
+            text-shadow: 0 0 10px #14E300;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    
+    <div class="track-section">
+        <div class="h-en">TRACK</div>
+        <div class="h-ua">КОЛІЯ</div>
+        <div class="track-box">2</div>
+    </div>
+
+    <div class="content-section">
+        
+        <div class="top-row">
+            <div class="column">
+                <div class="h-en">TIME</div><div class="h-ua">ЧАС</div>
+                <div class="char-group"><div class="box">0</div><div class="box">0</div><div class="box">:</div><div class="box">1</div><div class="box">5</div></div>
+            </div>
+            <div class="column">
+                <div class="h-en">TRAIN №</div><div class="h-ua">ПОЇЗД №</div>
+                <div class="char-group"><div class="box">0</div><div class="box">7</div><div class="box">4</div></div>
+            </div>
+            <div class="column">
+                <div class="h-en">ARRIVAL</div><div class="h-ua">ПРИБУТТЯ</div>
+                <div class="char-group"><div class="box">0</div><div class="box">0</div><div class="box">:</div><div class="box">1</div><div class="box">5</div></div>
+            </div>
+            <div class="column">
+                <div class="h-en">DEPARTURE</div><div class="h-ua">ВІДПРАВЛЕННЯ</div>
+                <div class="char-group"><div class="box">0</div><div class="box">0</div><div class="box">:</div><div class="box">1</div><div class="box">8</div></div>
+            </div>
+        </div>
+
+        <div class="char-group" id="route-cells">
+            <script>for(let i=0; i<24; i++) document.write('<div class="box"> </div>');</script>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    const routes = ["ЦАЇВ-КАМІНСЬК", "TSAYIV-KAMINSK"];
+    const chars = "АБВГДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:- ";
+    let idx = 0;
+
+    function scramble(target) {
+        const boxes = document.querySelectorAll("#route-cells .box");
+        const paddedTarget = target.padStart(Math.floor((24 + target.length) / 2)).padEnd(24);
+        let iter = 0;
+        const interval = setInterval(() => {
+            boxes.forEach((box, i) => {
+                box.innerText = i < Math.floor(iter) ? paddedTarget[i] : chars[Math.floor(Math.random()*chars.length)];
+            });
+            if (iter >= 24) clearInterval(interval);
+            iter += 0.5;
+        }, 40);
+    }
+
+    setInterval(() => { scramble(routes[idx]); idx = (idx + 1) % routes.length; }, 7000);
+    scramble(routes[0]);
+</script>
+
+</body>
+</html>
