@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Universal City Extreme Terminal</title>
+    <style>
+        body {
+            background: #000;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .row {
+            flex: 1; /* Рядки розтягуються, щоб заповнити ВСЮ висоту */
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            overflow: hidden;
+            border-bottom: 1px solid #111;
+            background: #000;
+        }
+
+        .ticker {
+            display: inline-block;
+            font-family: 'Lucida Console', Monaco, monospace;
+            font-size: 6vh; /* ДУЖЕ великий шрифт */
+            font-weight: 900; /* Максимальна жирність */
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .ticker span {
+            padding: 0 10px; /* Мінімальні відступи між даними */
+        }
+
+        /* Напрямки та швидкості (різні для кожного рядка) */
+        .m1 { animation: moveLeft 15s steps(1000) infinite; }
+        .m2 { animation: moveRight 22s steps(1200) infinite; }
+        .m3 { animation: moveLeft 30s steps(1500) infinite; }
+        .m4 { animation: moveRight 18s steps(1000) infinite; }
+
+        .up { color: #00ff00; }
+        .down { color: #ff0000; }
+        .blue { color: #00ccff; }
+
+        @keyframes moveLeft {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        @keyframes moveRight {
+            from { transform: translateX(-50%); }
+            to { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="row"><div class="ticker m1"><span>TSV 248.36 <b class="up">▲</b> TKP 95.36 <b class="down">▼</b> UNV 132.25 <b class="up">▲</b> MET 56.39 <b class="up">▲</b> AIR 25.36 <b class="down">▼</b> FISL 104.12 <b class="up">▲</b> TSV 248.36 <b class="up">▲</b> TKP 95.36 <b class="down">▼</b> UNV 132.25 <b class="up">▲</b> MET 56.39 <b class="up">▲</b></span></div></div>
+    <div class="row"><div class="ticker m2"><span>S-40_SYSTEM_READY <b class="blue">●</b> RADAR_SCANNING_100% <b class="up">▲</b> SYNC_TOK_TSA_OK <b class="blue">●</b> DATA_LINK_STABLE <b class="up">▲</b> S-40_SYSTEM_READY <b class="blue">●</b> RADAR_SCANNING_100% <b class="up">▲</b> SYNC_TOK_TSA_OK</span></div></div>
+    <div class="row"><div class="ticker m3"><span>BTC 64231 <b class="up">▲</b> ETH 3452 <b class="down">▼</b> USD 41.20 <b class="up">▲</b> EUR 44.50 <b class="up">▲</b> UAH 1.00 <b class="down">▼</b> GOLD 2301 <b class="up">▲</b> BTC 64231 <b class="up">▲</b> ETH 3452 <b class="down">▼</b> USD 41.20 <b class="up">▲</b></span></div></div>
+    <div class="row"><div class="ticker m4"><span>METRO_LINE_1_FAST <b class="up">▲</b> TRAIN_044_APPROACHING <b class="blue">●</b> PLATFORM_3_CLEAR <b class="up">▲</b> AIRPORT_TOKRYSPIL_OPEN <b class="up">▲</b> METRO_LINE_1_FAST <b class="up">▲</b> TRAIN_044_APPROACHING</span></div></div>
+    <div class="row"><div class="ticker m1"><span>FISL 104.12 <b class="up">▲</b> TSV 248.36 <b class="up">▲</b> TKP 95.36 <b class="down">▼</b> UNV 132.25 <b class="up">▲</b> MET 56.39 <b class="up">▲</b> AIR 25.36 <b class="down">▼</b> FISL 104.12 <b class="up">▲</b> TSV 248.36 <b class="up">▲</b> TKP 95.36 <b class="down">▼</b></span></div></div>
+    <div class="row"><div class="ticker m2"><span>IVAN_ADMIN_ACCESS <b class="blue">●</b> NODE_774_ACTIVE <b class="up">▲</b> ENCRYPTION_ENABLED <b class="blue">●</b> SIGNAL_STRENGTH_MAX <b class="up">▲</b> IVAN_ADMIN_ACCESS <b class="blue">●</b> NODE_774_ACTIVE <b class="up">▲</b></span></div></div>
+    <div class="row"><div class="ticker m3"><span>@UNIVERSAL_CITY_LIVE <b class="up">▲</b> WEATHER_18C <b class="blue">●</b> NEW_BUILDING_TSAYIV <b class="up">▲</b> TRANSPORT_FEVER_LINK_OK <b class="up">▲</b> @UNIVERSAL_CITY_LIVE <b class="up">▲</b> WEATHER_18C <b class="blue">●</b></span></div></div>
+    <div class="row"><div class="ticker m4"><span>TSV 248.36 <b class="up">▲</b> TKP 95.36 <b class="down">▼</b> UNV 132.25 <b class="up">▲</b> MET 56.39 <b class="up">▲</b> AIR 25.36 <b class="down">▼</b> FISL 104.12 <b class="up">▲</b> TSV 248.36 <b class="up">▲</b> TKP 95.36 <b class="down">▼</b> UNV 132.25 <b class="up">▲</b></span></div></div>
+
+</body>
+</html>
