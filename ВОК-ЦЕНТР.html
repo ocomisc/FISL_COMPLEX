@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Головне табло Цаїв-Пасажирський</title>
+    <style>
+        @font-face {
+            font-family: 'Krapka';
+            src: url('mono_biletik-regular_1_0_w.woff') format('woff');
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            margin: 0;
+            padding: 40px;
+            font-family: Arial, sans-serif;
+            text-transform: uppercase;
+        }
+
+        .main-board {
+            display: flex;
+            flex-direction: column;
+            width: fit-content;
+            margin: 0 auto;
+            background: #080808;
+            border: 4px solid #1a1a1a;
+            padding: 20px;
+        }
+
+        /* Шапка */
+        .board-header {
+            display: grid;
+            grid-template-columns: 80px 120px 450px 120px 120px 80px;
+            gap: 10px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #222;
+            text-align: center;
+        }
+
+        .h-en { color: #555; font-size: 12px; font-weight: bold; }
+        .h-ua { color: #333; font-size: 10px; margin-top: 2px; }
+
+        /* Рядки */
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .train-row {
+            display: grid;
+            grid-template-columns: 80px 120px 450px 120px 120px 80px;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .cell {
+            display: flex;
+            gap: 3px;
+            justify-content: center;
+        }
+
+        .box {
+            width: 20px;
+            height: 32px;
+            background: #111;
+            border: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #14E300;
+            font-family: 'Krapka', sans-serif;
+            font-size: 22px;
+            text-shadow: 0 0 8px #14E300;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-board">
+    <div class="board-header">
+        <div><div class="h-en">TRAIN</div><div class="h-ua">ПОЇЗД</div></div>
+        <div><div class="h-en">TIME</div><div class="h-ua">ЧАС</div></div>
+        <div><div class="h-en">DESTINATION</div><div class="h-ua">СПОЛУЧЕННЯ</div></div>
+        <div><div class="h-en">ARRIVAL</div><div class="h-ua">ПРИБУТТЯ</div></div>
+        <div><div class="h-en">DEPARTURE</div><div class="h-ua">ВІДПР.</div></div>
+        <div><div class="h-en">TRACK</div><div class="h-ua">КОЛІЯ</div></div>
+    </div>
+
+    <div class="schedule-list" id="board-content"></div>
+</div>
+
+<script>
+    // БАЗА ДАНИХ ТАБЛО (Виправлена кома між об'єктами!)
+    const trainData = [
+        { num: "074", time: "20:05", ua: "ЦАЇВ-КАМІНСЬК", en: "TSAYIV-KAMINSK", arr: "20:05", dep: "20:18", track: "4" },
+        { num: "102", time: "20:05", ua: "КИЇВ-ЦАЇВ", en: "KYIV-TSAYIV", arr: "20:05", dep: "--:--", track: "3" },
+        { num: "012", time: "20:10", ua: "ЦАЇВ-ЛЬВІВ", en: "TSAYIV-LVIV", arr: "20:10", dep: "20:55", track: "5" },
+        { num: "744", time: "21:00", ua: "ЦАЇВ-ТАРПОЛЬ", en: "TSAYIV-TARPOLIS", arr: "21:00", dep: "21:10", track: "1" },
+        { num: "081", time: "21:20", ua: "СОЛЬГОВІ ГОРИ-ЦАЇВ", en: "SOLHOVI HORY-TSAYIV", arr: "22:30", dep: "--:--", track: "2" }, // Кома була пропущена тут
+        { num: "188", time: "23:20", ua: "ЦАЇВ-СУПРАЛЬСЬК", en: "TSAYIV-SUPRALSK", arr: "23:30", dep: "23:50", track: "6" }
+    ];
+
+    const chars = "АБВГДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:- ";
+    let isEnglish = false;
+
+    function createRow(data, index) {
+        return `
+            <div class="train-row" id="row-${index}">
+                <div class="cell" data-field="num">${makeBoxes(data.num, 3)}</div>
+                <div class="cell" data-field="time">${makeBoxes(data.time, 5)}</div>
+                <div class="cell" data-field="dest" style="justify-content: flex-start;">${makeBoxes(data.ua, 22)}</div>
+                <div class="cell" data-field="arr">${makeBoxes(data.arr, 5)}</div>
+                <div class="cell" data-field="dep">${makeBoxes(data.dep, 5)}</div>
+                <div class="cell" data-field="track">${makeBoxes(data.track, 2)}</div>
+            </div>
+        `;
+    }
+
+    function makeBoxes(text, count) {
+        let html = '';
+        let padded = text.padEnd(count, ' ');
+        for(let char of padded) html += `<div class="box">${char}</div>`;
+        return html;
+    }
+
+    const container = document.getElementById('board-content');
+    trainData.forEach((t, i) => container.innerHTML += createRow(t, i));
+
+    function animateText(rowIndex, newText, field) {
+        const row = document.getElementById(`row-${rowIndex}`);
+        const boxes = row.querySelector(`[data-field="${field}"]`).querySelectorAll('.box');
+        const paddedText = newText.padEnd(boxes.length, ' ');
+        
+        let iter = 0;
+        const interval = setInterval(() => {
+            boxes.forEach((box, i) => {
+                if (i < Math.floor(iter)) {
+                    box.innerText = paddedText[i];
+                } else {
+                    box.innerText = chars[Math.floor(Math.random() * chars.length)];
+                }
+            });
+            if (iter >= boxes.length) clearInterval(interval);
+            iter += 0.5;
+        }, 30);
+    }
+
+    function updateBoard() {
+        trainData.forEach((t, i) => {
+            const destination = isEnglish ? t.en : t.ua;
+            animateText(i, destination, 'dest');
+        });
+        isEnglish = !isEnglish;
+    }
+
+    // Запускаємо інтервал оновлення
+    setInterval(updateBoard, 15000); // Змінив на 15 секунд, 20 — трохи довго для тесту
+    updateBoard();
+</script>
+
+</body>
+</html>
